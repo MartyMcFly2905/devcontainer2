@@ -18,8 +18,8 @@ Questo DevContainer funziona sia per il corso di **Reti Logiche** che per **Calc
 1. Clona questa repo:
 
    ```bash
-   git clone https://github.com/MartyMcFly2905/devcontainer-reti-calcolatori.git
-   cd reti-logiche-devcontainer
+   git clone https://github.com/MartyMcFly2905/devcontainer_reti.git
+   cd devcontainer_reti
    ```
 2. Apri la cartella in VSCode.
 3. Premi **F1** → “Dev Containers: Reopen in Container”.
@@ -35,55 +35,25 @@ Lo script `setup_reti.sh` esegue i seguenti passaggi:
 
 1.  Scarica l'archivio ufficiale fornito dal docente.
 2.  Estrae i file necessari in `/workspace/reti_logiche/`.
-3.  Esegue un test di compilazione per Assembly e Verilog per assicurarsi che tutto funzioni.
+3.  Crea i file `./Assemble.sh` e `debug.sh`.
 
-Al termine della build, troverai la cartella `reti_logiche` pronta nel tuo workspace, i comandi sono identici a quelli del corso, avendo aggiunto powershell.
+Al termine della build, troverai la cartella `reti_logiche/linux` pronta nel tuo workspace.
 
----
+### Test
 
-## Test ambiente manuale - senza pwsh
-
-### Assembly
-
-```bash
-cd /workspace/reti_logiche
-nasm -f elf32 test-ambiente.s -o test-ambiente.o
-gcc -m32 test-ambiente.o -o test-ambiente
-./test-ambiente
-```
-
-Output atteso:
+Per testare, deve restituire `Tutto OK`:
 
 ```
-Ok.
+#nella cartella reti_logiche/linux
+
+./Assemble.sh demo/demo1.s
+
+./demo/demo1
 ```
 
-### Verilog
+Per il debug: `./debug.sh demo/demo1`.
 
-```bash
-iverilog -o test-ambiente.vvp test-ambiente.v
-vvp test-ambiente.vvp
-```
-
-Output atteso:
-
-```
-Ok.
-```
-
----
-
-## Debug Assembly
-
-Compilazione con simboli:
-
-```bash
-nasm -f elf32 -g -F dwarf test-ambiente.s -o test-ambiente.o
-gcc -m32 test-ambiente.o -o test-ambiente
-gdb ./test-ambiente
-```
-
-Poi usa `break`, `run`, `stepi` per debug step-by-step.
+>All'esame i duali sono `./Assemble.ps1` e `./Debug.ps1`
 
 ---
 
@@ -92,4 +62,3 @@ Poi usa `break`, `run`, `stepi` per debug step-by-step.
 * Il container include già `nasm`, `gcc-multilib`, `gdb`, `iverilog`, `gtkwave`.
 * Per Calcolatori, contiene anche `libce` e `qemu-ce`.
 * Estensioni VSCode (Assembly, Verilog, C/C++, PDF) sono installate automaticamente.
-

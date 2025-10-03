@@ -1,5 +1,5 @@
 {
-    "name": "reti-logiche-calcolatori",
+    "name": "devcontainer-reti",
     "build": {
         "dockerfile": "Dockerfile"
     },
