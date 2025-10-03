@@ -18,7 +18,7 @@ Questo DevContainer funziona sia per il corso di **Reti Logiche** che per **Calc
 1. Clona questa repo:
 
    ```bash
-   git clone https://github.com/MartyMcFly2905/devcontainer-reti-calcolatori.git
+   git clone https://github.com/MartyMcFly2905/devcontainer2.git
    cd reti-logiche-devcontainer
    ```
 2. Apri la cartella in VSCode.
