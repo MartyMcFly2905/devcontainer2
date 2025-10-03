@@ -32,15 +32,16 @@ Questo DevContainer funziona sia per il corso di **Reti Logiche** che per **Calc
 L'ambiente per Reti Logiche viene configurato **automaticamente** la prima volta che il container viene creato.
 
 Lo script `setup_reti.sh` esegue i seguenti passaggi:
+
 1.  Scarica l'archivio ufficiale fornito dal docente.
 2.  Estrae i file necessari in `/workspace/reti_logiche/`.
 3.  Esegue un test di compilazione per Assembly e Verilog per assicurarsi che tutto funzioni.
 
-Al termine della build, troverai la cartella `reti_logiche` pronta nel tuo workspace.
+Al termine della build, troverai la cartella `reti_logiche` pronta nel tuo workspace, i comandi sono identici a quelli del corso, avendo aggiunto powershell.
 
 ---
 
-## Test ambiente
+## Test ambiente manuale - senza pwsh
 
 ### Assembly
 

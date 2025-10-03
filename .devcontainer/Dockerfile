@@ -27,8 +27,6 @@ RUN wget https://github.com/PowerShell/PowerShell/releases/download/v7.4.3/power
     rm powershell_7.4.3-1.deb_amd64.deb
 # ---------------------------------------------
 
-# Il resto del file rimane invariato...
-# Cartella di lavoro per il download e la compilazione
 WORKDIR /tmp/build-staging
 
 # ...ecc.
