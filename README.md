@@ -1,6 +1,6 @@
-# DevContainer per Reti Logiche e Calcolatori (UniPi)
+# DevContainer per Reti Logiche
 
-Questo DevContainer funziona sia per il corso di **Reti Logiche** che per **Calcolatori Elettronici**.
+DevContainer per il corso di **Reti Logiche**.
 È pensato per funzionare anche su **Apple Silicon** (tramite Docker Desktop) e su **Linux/Windows** senza bisogno di WSL/UTM.
 
 ---
@@ -60,5 +60,4 @@ Per il debug: `./debug.sh demo/demo1`.
 ## Note
 
 * Il container include già `nasm`, `gcc-multilib`, `gdb`, `iverilog`, `gtkwave`.
-* Per Calcolatori, contiene anche `libce` e `qemu-ce`.
-* Estensioni VSCode (Assembly, Verilog, C/C++, PDF) sono installate automaticamente.
+* Estensioni VSCode sono installate automaticamente.
