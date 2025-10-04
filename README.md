@@ -53,11 +53,10 @@ Per testare, deve restituire `Tutto OK`:
 
 #### Debugger
 
-Usa **gdb** su host **x86_64** o **qemu-i386 + gdb-multiarch** su host **ARM**.
-Uso: `./debug.sh <eseguibile>`
-Carica automaticamente `./files/gdb_startup`.
+Selezionare la propria architettura, lo script usa **gdb** su host **x86_64** o **qemu-i386 + gdb-multiarch** su host **ARM**.
+Uso: `./debug.sh <eseguibile>`, attendere il collegamento e selezionare `1` per x86 o `2` per altro.
 
-> *Nota:* Dopo il collegamento con QEMU/gdb-multiarch, potrebbe essere necessario inviare il comando **`c`** (continue) per raggiungere la funzione `_main`.
+> *Nota:* Dopo il collegamento con QEMU/gdb-multiarch, potrebbe essere necessario inviare il comando **`c`** (continue) per raggiungere la funzione `_main` del proprio programma.
 
 ## Note
 

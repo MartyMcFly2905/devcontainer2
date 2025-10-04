@@ -64,43 +64,53 @@ if [ ! -f "$exe" ]; then
     exit 1
 fi
 
-ARCH=$(uname -m)
+# Richiedi all'utente di selezionare l'architettura
+echo "Seleziona l'architettura:"
+echo "1) x86 (gdb diretto)"
+echo "2) altro (qemu-i386 + gdb-multiarch)"
+read -p "Scelta [1/2]: " scelta
 
-if [[ "$ARCH" == "x86_64" ]]; then
-    echo ">>> Host x86 rilevato → avvio gdb diretto"
-    if [ -f "./files/gdb_startup" ]; then
-        gdb -x "./files/gdb_startup" "$exe"
-    else
-        gdb "$exe"
-    fi
-else
-    echo ">>> Host $ARCH rilevato (probabile ARM) → uso QEMU gdbserver + gdb-multiarch"
+case $scelta in
+    1)
+        echo ">>> Modalità x86 selezionata → avvio gdb diretto"
+        if [ -f "./files/gdb_startup" ]; then
+            gdb -x "./files/gdb_startup" "$exe"
+        else
+            gdb "$exe"
+        fi
+        ;;
+    2)
+        echo ">>> Modalità altro selezionata → uso QEMU gdbserver + gdb-multiarch"
 
-    if ! command -v qemu-i386 &>/dev/null; then
-        echo "Errore: qemu-i386 non trovato. Installa con:"
-        echo "  sudo apt-get update && sudo apt-get install -y qemu-user"
+        if ! command -v qemu-i386 &>/dev/null; then
+            echo "Errore: qemu-i386 non trovato. Installa con:"
+            echo "  sudo apt-get update && sudo apt-get install -y qemu-user"
+            exit 1
+        fi
+        if ! command -v gdb-multiarch &>/dev/null; then
+            echo "Errore: gdb-multiarch non trovato. Installa con:"
+            echo "  sudo apt-get update && sudo apt-get install -y gdb-multiarch"
+            exit 1
+        fi
+
+        # Avvia QEMU in gdbserver
+        qemu-i386 -g 1234 "$exe" &
+        QEMU_PID=$!
+        sleep 1
+
+        if [ -f "./files/gdb_startup" ]; then
+            gdb-multiarch -ex "set architecture i386" -ex "target remote :1234" -x "./files/gdb_startup" "$exe"
+        else
+            gdb-multiarch -ex "set architecture i386" -ex "target remote :1234" "$exe"
+        fi
+
+        kill $QEMU_PID 2>/dev/null
+        ;;
+    *)
+        echo "Errore: scelta non valida. Usa 1 per x86 o 2 per altro."
         exit 1
-    fi
-    if ! command -v gdb-multiarch &>/dev/null; then
-        echo "Errore: gdb-multiarch non trovato. Installa con:"
-        echo "  sudo apt-get update && sudo apt-get install -y gdb-multiarch"
-        exit 1
-    fi
-
-    # Avvia QEMU in gdbserver
-    qemu-i386 -g 1234 "$exe" &
-    QEMU_PID=$!
-    sleep 1
-
-    if [ -f "./files/gdb_startup" ]; then
-        gdb-multiarch -ex "set architecture i386" -ex "target remote :1234" -x "./files/gdb_startup" "$exe"
-    else
-        gdb-multiarch -ex "set architecture i386" -ex "target remote :1234" "$exe"
-    fi
-
-    kill $QEMU_PID 2>/dev/null
-fi
-
+        ;;
+esac
 EOF
 
 # Rendi eseguibili gli script
