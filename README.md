@@ -51,11 +51,13 @@ Per testare, deve restituire `Tutto OK`:
 ./demo/demo1
 ```
 
-Per il debug: `./debug.sh demo/demo1`.
+#### Debugger
 
->All'esame i duali sono `./Assemble.ps1` e `./Debug.ps1`
+Usa **gdb** su host **x86_64** o **qemu-i386 + gdb-multiarch** su host **ARM**.
+Uso: `./debug.sh <eseguibile>`
+Carica automaticamente `./files/gdb_startup`.
 
----
+> *Nota:* Dopo il collegamento con QEMU/gdb-multiarch, potrebbe essere necessario inviare il comando **`c`** (continue) per raggiungere la funzione `_main`.
 
 ## Note
 

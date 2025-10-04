@@ -51,21 +51,56 @@ EOF
 echo ">>> Creazione debug.sh..."
 cat > debug.sh << 'EOF'
 #!/bin/bash
+# Debug script adattivo per Reti Logiche
+# - x86: usa gdb diretto
+# - ARM: usa qemu-i386 + gdb-multiarch
+# Sempre carica gdb_startup se presente (breakpoint su _main)
 
 [ $# -eq 0 ] && echo "Usage: $0 <executable>" && exit 1
-[ ! -f "$1" ] && echo "Error: File '$1' not found" && exit 1
+exe=$1
 
-# Usa SEMPRE gdb_startup se esiste
-if [ -f "./files/gdb_startup" ]; then
-    echo "=== GDB DEBUG (with startup) ==="
-    echo "File: $1"
-    gdb -x "./files/gdb_startup" "$1"
-else
-    echo "=== GDB DEBUG (manual) ==="
-    echo "File: $1"
-    echo "Type 'run' to start"
-    gdb -ex "break main" -ex "run" "$1"
+if [ ! -f "$exe" ]; then
+    echo "Error: file '$exe' not found"
+    exit 1
 fi
+
+ARCH=$(uname -m)
+
+if [[ "$ARCH" == "x86_64" ]]; then
+    echo ">>> Host x86 rilevato → avvio gdb diretto"
+    if [ -f "./files/gdb_startup" ]; then
+        gdb -x "./files/gdb_startup" "$exe"
+    else
+        gdb "$exe"
+    fi
+else
+    echo ">>> Host $ARCH rilevato (probabile ARM) → uso QEMU gdbserver + gdb-multiarch"
+
+    if ! command -v qemu-i386 &>/dev/null; then
+        echo "Errore: qemu-i386 non trovato. Installa con:"
+        echo "  sudo apt-get update && sudo apt-get install -y qemu-user"
+        exit 1
+    fi
+    if ! command -v gdb-multiarch &>/dev/null; then
+        echo "Errore: gdb-multiarch non trovato. Installa con:"
+        echo "  sudo apt-get update && sudo apt-get install -y gdb-multiarch"
+        exit 1
+    fi
+
+    # Avvia QEMU in gdbserver
+    qemu-i386 -g 1234 "$exe" &
+    QEMU_PID=$!
+    sleep 1
+
+    if [ -f "./files/gdb_startup" ]; then
+        gdb-multiarch -ex "set architecture i386" -ex "target remote :1234" -x "./files/gdb_startup" "$exe"
+    else
+        gdb-multiarch -ex "set architecture i386" -ex "target remote :1234" "$exe"
+    fi
+
+    kill $QEMU_PID 2>/dev/null
+fi
+
 EOF
 
 # Rendi eseguibili gli script
