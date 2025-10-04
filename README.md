@@ -35,7 +35,7 @@ Lo script `setup_reti.sh` esegue i seguenti passaggi:
 
 1.  Scarica l'archivio ufficiale fornito dal docente.
 2.  Estrae i file necessari in `/workspace/reti_logiche/`.
-3.  Crea i file `./Assemble.sh` e `debug.sh`.
+3.  Crea i file `assemble.sh` e `debug.sh`.
 
 Al termine della build, troverai la cartella `reti_logiche/linux` pronta nel tuo workspace.
 
@@ -46,7 +46,7 @@ Per testare, deve restituire `Tutto OK`:
 ```
 #nella cartella reti_logiche/linux
 
-./Assemble.sh demo/demo1.s
+./assemble.sh demo/demo1.s
 
 ./demo/demo1
 ```
@@ -54,9 +54,11 @@ Per testare, deve restituire `Tutto OK`:
 #### Debugger
 
 Selezionare la propria architettura, lo script usa **gdb** su host **x86_64** o **qemu-i386 + gdb-multiarch** su host **ARM**.
-Uso: `./debug.sh <eseguibile>`, attendere il collegamento e selezionare `1` per x86 o `2` per altro.
+Uso: `./debug.sh <eseguibile>(es. demo/demo1)`, attendere il collegamento e selezionare `1` per x86 o `2` per altro.
 
-> *Nota:* Dopo il collegamento con QEMU/gdb-multiarch, potrebbe essere necessario inviare il comando **`c`** (continue) per raggiungere la funzione `_main` del proprio programma.
+*Nota:* Dopo il collegamento con QEMU/gdb-multiarch, potrebbe essere necessario inviare il comando **`c`** (continue) per raggiungere la funzione `_main` del proprio programma.
+
+> All'esame i duali saranno semplicemente `assemble.ps1` e `debug.ps1`.
 
 ## Note
 
